@@ -53,7 +53,7 @@ function InputTags(props) {
 }
 
 
-function NewPost() {
+function NewPost(props) {
 
   const [notas, setNotas] = React.useState(new Object());
 
@@ -67,7 +67,10 @@ function NewPost() {
       nota.mensaje = String(mensaje);
       nota.likes = Array(0);
       nota.dislikes = Array(0);
-      nota.tags = Array(0);
+      nota.tags = notas;
+      nota.user = props.name;
+      nota.pImg = props.pimg;
+      console.log('',props.pimg);
       setNotas(nota);
       setTitulo('');
       setMensaje('');
@@ -139,9 +142,9 @@ function NewPost() {
 
 
 
-function Home() {
+function Home(props) {
   return (
-    <NewPost/>
+    <NewPost name={props.name} pimg={props.pimg}/>
   )
 }
 
