@@ -1,12 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import Login from './logIn'
+import MainNavBar from './MainNav';
 import Home from './Home'
 
+function App() {
+  return (
+    <MainNavBar/>
+  )
+}
+
 ReactDOM.render(
-    <Home/>,
+    <App/>,
   document.getElementById('root')
 );
 
