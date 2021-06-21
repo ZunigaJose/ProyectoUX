@@ -7,7 +7,17 @@ import Home from './Home'
 
 function App() {
   return (
-    <MainNavBar/>
+    <div>
+      <div>
+        <MainNavBar/>
+      </div>
+      <div>
+        <br/>
+        <br/>
+        <br/>
+        <Home/>
+      </div>
+    </div>
   )
 }
 
