@@ -36,6 +36,24 @@ function Login() {
       );
 }
 
+function Note(props) {
+  return (
+    <div className="card" id={props.key}>
+       <h4 className="card-header">
+       <img className="w/40 rounded/circle" src={props.nota.pImg}/>
+       {"Post por: " + props.nota.user}</h4>
+       <div className="card-body">
+        <h5 className="card-title">{props.nota.titulo}</h5>
+        <p className="card-text">{props.nota.mensaje}</p>
+        <button type="button" className={props.nota.likes ? "btn btn-success" : "btn btn-primary"}
+        onClick={() => props.handlelike(props.key)}>{"Like 👍" + '(' + props.nota.likes.length + ')'}</button>
+        <button type="button" className={props.nota.likes ? "btn btn-success" : "btn btn-primary"}
+        onClick={() => props.handledislike(props.key)}>{"Dislike 👎" + '(' + props.nota.dislikes.length + ')'}</button>
+       </div>
+     </div>
+   )
+}
+
 function InputTags(props) {
   return (
     <div className="input-tag">
@@ -52,26 +70,72 @@ function InputTags(props) {
   );
 }
 
+function DivPosts(props) {
+  const [notas, setNotas] = React.useState(JSON.parse(localStorage.getItem('notas')) || []);
+
+  function stNotas(nota) {
+    const notasTmp = notas;
+    notasTmp.push(nota);
+    setNotas(notasTmp);
+    localStorage.setItem('notas', JSON.stringify(notas));
+  }
+
+  function isLiked(i) {
+    const notasTmp = notas;
+    return notasTmp[i].likes.some(
+      ele => String(ele) == String(props.name)
+    );
+  }
+
+  function isDisliked(i) {
+    console.log('wuu')
+    const notasTmp = notas;
+    return notasTmp[i].likes.some(
+      ele => String(ele) == String(props.name)
+    );
+  }
+
+  function handlelike(i) {
+
+  }
+
+  function handleDislike(i) {
+    
+  }
+
+  return (
+    <div>
+      <div>
+        <NewPost  name={props.name} pimg={props.pimg} stNotas={stNotas}/>
+      </div>
+      <div>
+        {notas.map((nota, i) => ( 
+          <Note key={i} nota={nota} handlelike={handlelike(i)} handledislike={handleDislike(i)}
+          isliked={isLiked(i)} isDisliked={isDisliked(i)}/>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 function NewPost(props) {
 
-  const [notas, setNotas] = React.useState(new Object());
-
+  //const [notas, setNotas] = React.useState(JSON.parse(localStorage.getItem('notas')) || []);
     function publicar(e) {
       if(titulo == '') {
         return;
       }
-      let nota = new Object();
+      const nota = new Object();
       e.preventDefault();
       nota.titulo = String(titulo);
       nota.mensaje = String(mensaje);
       nota.likes = Array(0);
       nota.dislikes = Array(0);
-      nota.tags = notas;
+      nota.tags = tagsHook;
       nota.user = props.name;
       nota.pImg = props.pimg;
-      console.log('',props.pimg);
-      setNotas(nota);
+      props.stNotas(nota);
+      setTags([]);
       setTitulo('');
       setMensaje('');
     }
@@ -90,11 +154,14 @@ function NewPost(props) {
         e.preventDefault();
       }
       const val = e.target.value;
-      if (e.key === 'Space' && val) {
-        if (tagsHook.find(tag => tag.toLowerCase() === val.toLowerCase())) {
+      if (e.key === ' ' && val) {
+        if (tagsHook.find(tag => tag.toLowerCase() === val.toLowerCase()) || 
+        val == ' ') {
+          e.target.value = '';
           return;
         }
         setTags(oldArray => [...oldArray, val]);
+        e.target.value = '';
       } else if (e.key === 'Backspace' && !val) {
         removeTag(tagsHook.length - 1);
       }
@@ -144,7 +211,7 @@ function NewPost(props) {
 
 function Home(props) {
   return (
-    <NewPost name={props.name} pimg={props.pimg}/>
+    <DivPosts name={props.name} pimg={props.pimg}/>
   )
 }
 
