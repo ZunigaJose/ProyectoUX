@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import GoogleLogin from "react-google-login";
 import './index.css';
 //import Login from './logIn'
-import MainNavBar from './MainNav';
 import Home from './Home'
 
 function Login(props) {

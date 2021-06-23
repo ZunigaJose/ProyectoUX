@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import GoogleLogin from "react-google-login";
 import './tags.css'
+import './index.css'
+import MainNavBar from './MainNav';
 function Login() {
     const [logged, setLogged] = useState(false);
     const [name, setName] = useState("");
@@ -37,17 +39,22 @@ function Login() {
 }
 
 function Note(props) {
+  console.log(props.nota.date);
   return (
-    <div className="card" id={props.key}>
+    <div className="card mb-4" id={props.id}>
        <h4 className="card-header">
-       <img className="w/40 rounded/circle" src={props.nota.pImg}/>
-       {"Post por: " + props.nota.user}</h4>
+       <img className="pImg" src={props.nota.pImg}/>
+       {'   ' + props.nota.user}
+       <p data-toggle="tooltip" data-placement="top" 
+       title={props.nota.date.split(' ').splice(1,4).join(' ')}>
+         {props.nota.date.split(' ').splice(1,3).join(' ')}</p>
+       </h4>
        <div className="card-body">
-        <h5 className="card-title">{props.nota.titulo}</h5>
+        <h1 className="card-title">{props.nota.titulo}</h1>
         <p className="card-text">{props.nota.mensaje}</p>
-        <button type="button" className={props.nota.likes ? "btn btn-success" : "btn btn-primary"}
+        <button type="button" className={props.isliked ? "btn btn-success" : "btn btn-primary"}
         onClick={() => props.handlelike(props.key)}>{"Like 👍" + '(' + props.nota.likes.length + ')'}</button>
-        <button type="button" className={props.nota.likes ? "btn btn-success" : "btn btn-primary"}
+        <button type="button" className={props.isDisliked ? "btn btn-danger" : "btn btn-primary"}
         onClick={() => props.handledislike(props.key)}>{"Dislike 👎" + '(' + props.nota.dislikes.length + ')'}</button>
        </div>
      </div>
@@ -75,23 +82,23 @@ function DivPosts(props) {
 
   function stNotas(nota) {
     const notasTmp = notas;
+    setNotas((notas) => [...notas, nota]);
     notasTmp.push(nota);
-    setNotas(notasTmp);
-    localStorage.setItem('notas', JSON.stringify(notas));
+    localStorage.setItem('notas', JSON.stringify(notasTmp));
   }
 
   function isLiked(i) {
     const notasTmp = notas;
     return notasTmp[i].likes.some(
-      ele => String(ele) == String(props.name)
+      ele => String(ele) === String(props.name)
     );
   }
 
   function isDisliked(i) {
     console.log('wuu')
     const notasTmp = notas;
-    return notasTmp[i].likes.some(
-      ele => String(ele) == String(props.name)
+    return notasTmp[i].dislikes.some(
+      ele => String(ele) === String(props.name)
     );
   }
 
@@ -108,9 +115,9 @@ function DivPosts(props) {
       <div>
         <NewPost  name={props.name} pimg={props.pimg} stNotas={stNotas}/>
       </div>
-      <div>
+      <div className="container align-self-center">
         {notas.map((nota, i) => ( 
-          <Note key={i} nota={nota} handlelike={handlelike(i)} handledislike={handleDislike(i)}
+          <Note key={i} id={i} nota={nota} handlelike={handlelike(i)} handledislike={handleDislike(i)}
           isliked={isLiked(i)} isDisliked={isDisliked(i)}/>
         ))}
       </div>
@@ -122,7 +129,7 @@ function NewPost(props) {
 
   //const [notas, setNotas] = React.useState(JSON.parse(localStorage.getItem('notas')) || []);
     function publicar(e) {
-      if(titulo == '') {
+      if(titulo === '') {
         return;
       }
       const nota = new Object();
@@ -134,6 +141,8 @@ function NewPost(props) {
       nota.tags = tagsHook;
       nota.user = props.name;
       nota.pImg = props.pimg;
+      nota.date = new Date().toString();
+      console.log(nota.date);
       props.stNotas(nota);
       setTags([]);
       setTitulo('');
@@ -156,7 +165,7 @@ function NewPost(props) {
       const val = e.target.value;
       if (e.key === ' ' && val) {
         if (tagsHook.find(tag => tag.toLowerCase() === val.toLowerCase()) || 
-        val == ' ') {
+        val === ' ') {
           e.target.value = '';
           return;
         }
@@ -211,7 +220,14 @@ function NewPost(props) {
 
 function Home(props) {
   return (
-    <DivPosts name={props.name} pimg={props.pimg}/>
+    <div>
+      <div>
+        <MainNavBar/>
+      </div>
+      <div>
+        <DivPosts name={props.name} pimg={props.pimg}/>
+      </div>
+    </div>
   )
 }
 

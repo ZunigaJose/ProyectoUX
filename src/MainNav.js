@@ -1,6 +1,6 @@
 function MainNavBar(props) {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top mb-4">
       <div className="container-fluid">
         <label className="navbar-brand">Notas Locas</label>
         <button
