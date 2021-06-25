@@ -27,8 +27,12 @@ function Login(props) {
     <div className="row h-100">
       <div className="col-sm-12 my-auto">
         <div className="card w-50 mx-auto">
+          <h2 className="card-header text-center">
+            Notas Notas
+          </h2>
           <article className="card-body">
-         <GoogleLogin clientId="516244190309-rdj0i9i0vrbt82tbuqufe33hv1vue3g8.apps.googleusercontent.com"
+          <p>Bienvenido, favor ingrese con Google para continuar: </p>
+         <GoogleLogin  clientId="516244190309-rdj0i9i0vrbt82tbuqufe33hv1vue3g8.apps.googleusercontent.com"
             buttonText="Login"
             onSuccess={responseGoogle}
             onFailure={responseFail}

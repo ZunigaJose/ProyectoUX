@@ -56,7 +56,7 @@ function Note(props) {
         </div>
         <div class="clearfix"></div>
        <div className="card-body">
-        <h1 className="card-title">{props.nota.titulo}</h1>
+        <h3 className="card-title">{props.nota.titulo}</h3>
         <p className="card-text">{props.nota.mensaje}</p>
         <button type="button" className={props.isliked ? "btn btn-success" : "btn btn-primary"}
         onClick={() => props.handlelike(props.id)}>{"Like 👍" + '(' + props.nota.likes.length + ')'}</button>
@@ -164,6 +164,10 @@ function DivPosts(props) {
   }
 }
 
+  function setSearchFalse() {
+    setSearch(false);
+  }
+
   function handleDislike(i) {
     const newArr = [...notas];
     console.log('wuu', i);
@@ -191,7 +195,8 @@ function DivPosts(props) {
     <div>
       {localStorage.setItem('notas', JSON.stringify(notas))}
       <div>
-        <MainNavBar logged={props.logged} searchT={searchTerm} search={search} setSearchT={setSearchT} click={searchClick}/>
+        <MainNavBar logged={props.logged} searchT={searchTerm} search={search} setSearchT={setSearchT}
+         click={searchClick} false={setSearchFalse}/>
       </div>
       <div>
         <NewPost  name={props.name} pimg={props.pimg} stNotas={stNotas}/>

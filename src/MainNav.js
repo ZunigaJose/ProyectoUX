@@ -1,13 +1,17 @@
 import { GoogleLogout } from 'react-google-login';
+import { useGoogleLogout } from 'react-google-login'
 function MainNavBar(props) {
 
   function logout() {
     props.logged(false);
   }
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top mb-4">
       <div className="container-fluid">
-        <label className="navbar-brand">Notas Locas</label>
+        <label className="navbar-brand"
+        onClick={props.false}
+        >Notas Notas</label>
         <button
           style={{paddingRight:'6px'}}
           className="navbar-toggler"
@@ -22,6 +26,16 @@ function MainNavBar(props) {
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            {props.search && 
+            <li>
+              <button
+                  className="btn btn-outline-success my-2 my-sm-0"
+                  type="button"
+                  onClick={props.false}
+                >
+                  Volver a Inicio
+                </button>
+            </li>}
             <li>
               <form className="d-flex">
                 <input
