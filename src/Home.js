@@ -191,7 +191,7 @@ function DivPosts(props) {
     <div>
       {localStorage.setItem('notas', JSON.stringify(notas))}
       <div>
-        <MainNavBar searchT={searchTerm} search={search} setSearchT={setSearchT} click={searchClick}/>
+        <MainNavBar logged={props.logged} searchT={searchTerm} search={search} setSearchT={setSearchT} click={searchClick}/>
       </div>
       <div>
         <NewPost  name={props.name} pimg={props.pimg} stNotas={stNotas}/>
@@ -305,7 +305,7 @@ function Home(props) {
   return (
     <div>
       <div>
-        <DivPosts name={props.name} pimg={props.pimg}/>
+        <DivPosts logged={props.logged} name={props.name} pimg={props.pimg}/>
       </div>
     </div>
   )

@@ -60,7 +60,7 @@ function App() {
   return (
     <div>
       {(!logged) ? <Login logged={logged1} name={email} setImg={pimg}/> : 
-      <Home name={name} pimg={profileImg} /> }
+      <Home name={name} pimg={profileImg} logged={logged1}/> }
     </div>
   )
 }
