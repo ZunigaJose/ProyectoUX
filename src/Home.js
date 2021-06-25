@@ -42,20 +42,26 @@ function Note(props) {
   console.log(props.nota.date);
   return (
     <div className="card mb-4" id={props.id}>
-       <h4 className="card-header">
+       <div className="card-header">
+       <div className="float-left">
        <img className="pImg" src={props.nota.pImg}/>
        {'   ' + props.nota.user}
+       </div>
+       
+       <div className="float-right">
        <p data-toggle="tooltip" data-placement="top" 
        title={props.nota.date.split(' ').splice(1,4).join(' ')}>
          {props.nota.date.split(' ').splice(1,3).join(' ')}</p>
-       </h4>
+        </div>
+        </div>
+        <div class="clearfix"></div>
        <div className="card-body">
         <h1 className="card-title">{props.nota.titulo}</h1>
         <p className="card-text">{props.nota.mensaje}</p>
         <button type="button" className={props.isliked ? "btn btn-success" : "btn btn-primary"}
-        onClick={() => props.handlelike(props.key)}>{"Like 👍" + '(' + props.nota.likes.length + ')'}</button>
+        onClick={() => props.handlelike(props.id)}>{"Like 👍" + '(' + props.nota.likes.length + ')'}</button>
         <button type="button" className={props.isDisliked ? "btn btn-danger" : "btn btn-primary"}
-        onClick={() => props.handledislike(props.key)}>{"Dislike 👎" + '(' + props.nota.dislikes.length + ')'}</button>
+        onClick={() => props.handledislike(props.id)}>{"Dislike 👎" + '(' + props.nota.dislikes.length + ')'}</button>
        </div>
      </div>
    )
@@ -102,12 +108,47 @@ function DivPosts(props) {
     );
   }
 
-  function handlelike(i) {
+  function isInArr(array, value) {
+    if (array.length === 0) {
+      return false;
+    }
+    return array.some(
+      element => String(element) === String(value)
+    );
+  }
 
+  function handlelike(i) {
+    const newArr = [...notas];
+    console.log('wuu', i);
+    if (isInArr(newArr[i].likes, props.name)) {
+      const index = newArr[i].likes.findIndex(user => String(user) === String(props.name));
+      newArr[i].likes.splice(index, 1);
+      setNotas(newArr);
+      return;
+    }
+    newArr[i].likes.push(props.name);
+    if (isInArr(newArr[i].dislikes, props.name)) {
+      const index = newArr[i].dislikes.findIndex(user => String(user) === String(props.name));
+      newArr[i].dislikes.splice(index);
+    }
+    setNotas(newArr);
   }
 
   function handleDislike(i) {
-    
+    const newArr = [...notas];
+    console.log('wuu', i);
+    if (isInArr(newArr[i].dislikes, props.name)) {
+      const index = newArr[i].dislikes.findIndex(user => String(user) === String(props.name));
+      newArr[i].dislikes.splice(index, 1);
+      setNotas(newArr);
+      return;
+    }
+    newArr[i].dislikes.push(props.name);
+    if (isInArr(newArr[i].likes, props.name)) {
+      const index = newArr[i].likes.findIndex(user => String(user) === String(props.name));
+      newArr[i].likes.splice(index);
+    }
+    setNotas(newArr);
   }
 
   return (
@@ -117,7 +158,7 @@ function DivPosts(props) {
       </div>
       <div className="container align-self-center">
         {notas.map((nota, i) => ( 
-          <Note key={i} id={i} nota={nota} handlelike={handlelike(i)} handledislike={handleDislike(i)}
+          <Note key={i} id={i} nota={nota} handlelike={handlelike} handledislike={handleDislike}
           isliked={isLiked(i)} isDisliked={isDisliked(i)}/>
         ))}
       </div>
