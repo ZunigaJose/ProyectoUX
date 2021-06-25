@@ -29,8 +29,9 @@ function MainNavBar(props) {
             </li>
             <li>
                <form className="d-flex">
-                 <input className="form-control" type="search" placeholder="Search" aria-label="Search"/>
-                 <button className="btn btn-outline-success my-2 my-sm-0" type="submit"
+                 <input className="form-control" type="search" placeholder="Search" aria-label="Search"
+                 onChange={(e) => props.setSearchT(e.target.value)}/>
+                 <button className="btn btn-outline-success my-2 my-sm-0" type="submit" value={props.searchTerm}
                  onClick={props.click}>Search</button>
                </form>
             </li>

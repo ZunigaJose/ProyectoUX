@@ -85,6 +85,9 @@ function InputTags(props) {
 
 function DivPosts(props) {
   const [notas, setNotas] = React.useState(JSON.parse(localStorage.getItem('notas')) || []);
+  const [search, setSearch] = React.useState(false);
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const [notasSearched, setNotasSearched] = React.useState(Array(0));
 
   function stNotas(nota) {
     const notasTmp = notas;
@@ -134,6 +137,33 @@ function DivPosts(props) {
     setNotas(newArr);
   }
 
+  function findTags(tagArr, tag) {
+    for (let i = 0; i < tagArr.length; i++) {
+      const element = tagArr[i];
+      if (String(element) === String(tag)) {
+        return true;
+      }
+      if (String(element) === String(' ' + tag)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function searchClick(e) {
+    e.preventDefault();
+    setSearch(true);
+    setNotasSearched(Array(0));
+    for (let i = 0; i < notas.length; i++) {
+      const element = notas[i];
+      console.log(searchTerm, element.tags)
+      if (findTags(element.tags, searchTerm)) {
+        element.i = i;
+        setNotasSearched(oldNota => [...oldNota, element]);
+    }
+  }
+}
+
   function handleDislike(i) {
     const newArr = [...notas];
     console.log('wuu', i);
@@ -151,13 +181,26 @@ function DivPosts(props) {
     setNotas(newArr);
   }
 
+
+
+  function setSearchT(val) {
+    setSearchTerm(val);
+  }
+
   return (
     <div>
+      {localStorage.setItem('notas', JSON.stringify(notas))}
+      <div>
+        <MainNavBar searchT={searchTerm} search={search} setSearchT={setSearchT} click={searchClick}/>
+      </div>
       <div>
         <NewPost  name={props.name} pimg={props.pimg} stNotas={stNotas}/>
       </div>
       <div className="container align-self-center">
-        {notas.map((nota, i) => ( 
+        {(search) ? notasSearched.map((nota, i) => (
+          <Note key={i} id={nota.i} nota={nota} handlelike={handlelike} handledislike={handleDislike}
+          isliked={isLiked(nota.i)} isDisliked={isDisliked(nota.i)}/>
+        )) : notas.map((nota, i) => ( 
           <Note key={i} id={i} nota={nota} handlelike={handlelike} handledislike={handleDislike}
           isliked={isLiked(i)} isDisliked={isDisliked(i)}/>
         ))}
@@ -183,7 +226,6 @@ function NewPost(props) {
       nota.user = props.name;
       nota.pImg = props.pimg;
       nota.date = new Date().toString();
-      console.log(nota.date);
       props.stNotas(nota);
       setTags([]);
       setTitulo('');
@@ -262,9 +304,6 @@ function NewPost(props) {
 function Home(props) {
   return (
     <div>
-      <div>
-        <MainNavBar/>
-      </div>
       <div>
         <DivPosts name={props.name} pimg={props.pimg}/>
       </div>
